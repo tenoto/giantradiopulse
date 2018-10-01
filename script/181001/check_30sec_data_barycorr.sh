@@ -8,11 +8,11 @@ nibarytime.py \
 	$indir/ni1013010104_0mpu7_cl_crab_30sec.evt \
 	83.633218 22.014464 $indir/ni1013010104.orb \
 	--refframe ICRS --ephem JPLEPH.430 \
-	--outfits data/xray/v181001/2017221/ni1013010104_0mpu7_cl_crab_30sec_bary.evt 
+	--outfits data/xray/v181001/2017221/ni1013010104_0mpu7_cl_crab_30sec_nibary.evt 
 
 rm -f data/xray/v181001/2017221/ni1013010104_0mpu7_cl_crab_30sec_nibary_phase.evt
 faddphase_nu.py \
-	data/xray/v181001/2017221/ni1013010104_0mpu7_cl_crab_30sec_bary.evt  \
+	data/xray/v181001/2017221/ni1013010104_0mpu7_cl_crab_30sec_nibary.evt  \
 	57974.000000063641204 \
 	29.6396012136058 \
 	--nudot=-3.6870686500E-10 \
@@ -32,7 +32,7 @@ fplot_pulseprofile.py \
 # 57974.000000063641204 --> 113702332.816 + 0.0054986 = 113702332.8214986
 rm -f data/xray/v181001/2017221/ni1013010104_0mpu7_cl_crab_30sec_nibary_met_phase.evt 
 faddphase_nu.py \
-	data/xray/v181001/2017221/ni1013010104_0mpu7_cl_crab_30sec_bary.evt  \
+	data/xray/v181001/2017221/ni1013010104_0mpu7_cl_crab_30sec_nibary.evt  \
 	113702332.8214986 \
 	29.6396012136058 \
 	--nudot=-3.6870686500E-10 \
@@ -46,9 +46,3 @@ fplot_pulseprofile.py \
 	--nbin 100 \
 	--colname PULSE_PHASE \
 	--title "Crab pulse profile (MET)"    		
-
-make_crab_ephemeris_JPN.py data/radio/original/v181001/2017221/crab_JPNradio_ephemeris_MJD57974.yaml
-mv crab_JPNradio_ephemeris_MJD57974.par data/xray/v181001/2017221	
-
-#make_crab_ephemeris_JPN.py data/radio/original/v181001/2017221/crab_JPNradio_ephemeris_MJD57974.yaml
-#mv crab_JPNradio_ephemeris_MJD57974.par data/xray/v181001/2017221	
