@@ -1,6 +1,11 @@
 __author__  = 'Teruaki Enoto'
 __version__ = '0.01'
 __date__    = '2018 October 1'
+"""
+HISTORY
+2018-10-09 modified by T.Enoto
+2018-10-01 created by T.Enoto 
+"""
 
 import os 
 import pandas as pd 

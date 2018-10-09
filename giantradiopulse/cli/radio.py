@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+"""
+HISTORY
+2018-10-09 modified by T.Enoto
+2018-10-01 created by T.Enoto 
+"""
 
 import click 
 import giantradiopulse.radio 
