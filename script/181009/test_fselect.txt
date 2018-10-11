@@ -1,0 +1,1 @@
+fselect data/xray/v181009/2017221/ni1013010104_0mpu7_cl_nibary_phase.evt+1 test.evt "gtifilter('data/radio/fits/v181009/2017221/2017221_UsdS_DE430NEW2_GTI.fits[1]',BARY_TIME,'BARY_START','BARY_STOP')"
