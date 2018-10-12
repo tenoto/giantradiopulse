@@ -27,6 +27,9 @@ df = pd.read_csv(FILE_CRAB_PULSAR_EPHEMERIS,
 	delim_whitespace=True,skiprows=[0,1,2],header=0)
 
 for index, row in df.iterrows():
+	if row['proc_flag'] == 'False':
+		print('skip...')
+		continue 
 	if row['P0ms'] == '--':
 		continue
 	if str(row['dataid']) in SKIP_DATAID_LIST:
