@@ -200,7 +200,7 @@ fplot_pulseprofile.py \
 
 	def generate_correlation_xrayprofile_fitsfile(self,nphase=60,lagrange=2):
 		self.show_parameters()
-		profile = giantradiopulse.xrayprofile.XrayProfile()
+		profile = giantradiopulse.xrayprofile.XrayProfileFitsfile()
 		self.xrayprofile = prpfile.generate_fitsfile(
 			self.inputyamlfile,
 			self.param['niphaseevt'],
@@ -209,7 +209,7 @@ fplot_pulseprofile.py \
 			self.param['radio_gti_fitsfile'],
 			nphase=nphase,lagrange=lagrange)
 
-		
+
 
 class ProcessManager():
 	""" 
@@ -255,5 +255,5 @@ class ProcessManager():
 			setup_yaml = '%s/%s/%s_setup.yaml' % (self.outdir,obs.param['dataid'],obs.param['dataid'])
 			obs.reload_parameter_yamlfile(setup_yaml)
 			obs.generate_correlation_xrayprofile_fitsfile(nphase=nphase,lagrange=lagrange)
-
+			exit()
 
