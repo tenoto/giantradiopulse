@@ -219,7 +219,7 @@ fplot_pulseprofile.py \
 			outpdf = '%s_%s_zoom.pdf' % (self.xrayprofile_fitsfile.replace('.fits',''),lagstr)
 			profile.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.00,xmax=2.00,ymin=plot_ymin,ymax=plot_ymax)
 
-	class ProcessManager():
+class ProcessManager():
 	""" 
 	:param file_path: path to a file to setup yaml file.
 	"""
