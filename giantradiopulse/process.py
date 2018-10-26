@@ -201,7 +201,7 @@ fplot_pulseprofile.py \
 	def generate_correlation_xrayprofile_fitsfile(self,nphase=60,lagrange=2):
 		self.show_parameters()
 		profile = giantradiopulse.xrayprofile.XrayProfileFitsfile()
-		self.xrayprofile = profile.generate_fitsfile(
+		self.xrayprofile = profile.generate_correlation_fitsfile(
 			self.inputyamlfile,
 			self.param['niphaseevt'],
 			self.param['radio_mpgrp_fitsfile'],
