@@ -24,10 +24,10 @@ def prepare_datafiles(file_path,outdir):
 @cli.command(help="Run correlation study.")
 @click.argument("file_path", type=click.Path(exists=True))
 @click.option("--outdir", type=click.Path(), default='out/crabgrp')
-def run_correlation(file_path,outdir):
+def run_correlation_study(file_path,outdir):
 	process_manager = giantradiopulse.process.ProcessManager(
 		file_path,outdir=outdir)
-	process_manager.run_correlation()
+	process_manager.run_correlation_study()
 
 def main():
 	cli()

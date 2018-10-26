@@ -105,7 +105,6 @@ class ObservationUnit():
 			quit()
 		self.param['path_to_nicer_obsid'] = candidates[0]
 
-
 	def prepare_barycen_and_addphase_script(self):
 		self.param['nibaryevt']  = '%s/ni%s_0mpu7_cl_nibary.evt' % (self.param['suboutdir'],self.param['nicerobsid'])
 		self.param['nibarylog']  = '%s/ni%s_0mpu7_cl_nibary.log' % (self.param['suboutdir'],self.param['nicerobsid'])		
@@ -175,14 +174,15 @@ fplot_pulseprofile.py \
 		f.close()
 
 	def reload_parameter_yamlfile(self,inputyamlfile):
-		if not os.path.exists(inputyamlfile):
-			raise FileNotFoundError("{} not found.".format(inputyamlfile))
+		self.inputyamlfile = inputyamlfile
+
+		if not os.path.exists(self.inputyamlfile):
+			raise FileNotFoundError("{} not found.".format(self.inputyamlfile))
 		try:
-			self.param = yaml.load(open(inputyamlfile))
+			self.param = yaml.load(open(self.inputyamlfile))
 		except OSError as e:
 			raise 
-
-		print("setup yaml file {} is successfully loaded.".format(inputyamlfile))
+		print("setup yaml file {} is successfully loaded.".format(self.inputyamlfile))
 
 	def prepare_datafiles(self):
 		self.set_gti_file(self.param['PATH_TO_RADIO_DATADIR'])
@@ -198,10 +198,18 @@ fplot_pulseprofile.py \
 		self.show_parameters()
 		self.write_parameter_yamlfile()
 
-	def generate_correlation_fitsfile(self):
+	def generate_correlation_xrayprofile_fitsfile(self,nphase=60,lagrange=2):
 		self.show_parameters()
-		profile = giantradiopulse.xrayprofile.XrayProfile(self.param['niphaseevt'],self.param['radio_mpgrp_fitsfile'])
-		profile.writeAsFitsFormat()
+		profile = giantradiopulse.xrayprofile.XrayProfile()
+		self.xrayprofile = prpfile.generate_fitsfile(
+			self.inputyamlfile,
+			self.param['niphaseevt'],
+			self.param['radio_mpgrp_fitsfile'],
+			self.param['radio_ipgrp_fitsfile'],
+			self.param['radio_gti_fitsfile'],
+			nphase=nphase,lagrange=lagrange)
+
+		
 
 class ProcessManager():
 	""" 
@@ -242,10 +250,10 @@ class ProcessManager():
 		for obs in self.observationunit_list:
 			obs.prepare_datafiles()
 
-	def run_correlation(self):
+	def run_correlation_study(self,nphase=60,lagrange=2):
 		for obs in self.observationunit_list:			
 			setup_yaml = '%s/%s/%s_setup.yaml' % (self.outdir,obs.param['dataid'],obs.param['dataid'])
 			obs.reload_parameter_yamlfile(setup_yaml)
-			obs.generate_correlation_fitsfile()
+			obs.generate_correlation_xrayprofile_fitsfile(nphase=nphase,lagrange=lagrange)
 
 

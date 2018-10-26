@@ -144,7 +144,9 @@ class XrayProfileFitsfile():
 		for keyword in keywords:
 			hdu_new.header[keyword] = hdu_org.header[keyword]
 
-	def generate_fitsfile(self,setup_yamlfile,xray_fitsfile,mpgrp_fitsfile,ipgrp_fitsfile,radiogti_fitsfile,nphase=180,lagrange=10):
+	def generate_fitsfile(self,setup_yamlfile,
+		xray_fitsfile,mpgrp_fitsfile,ipgrp_fitsfile,radiogti_fitsfile,
+		nphase=180,lagrange=10):
 		self.read_setup_yamlfile(setup_yamlfile)
 		self.read_xray_fitsfile(xray_fitsfile)
 		self.read_radio_fitsfile(mpgrp_fitsfile,ipgrp_fitsfile,radiogti_fitsfile)
