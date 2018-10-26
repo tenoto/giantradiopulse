@@ -4,4 +4,7 @@ PLANETARY_EPHEMERIS: 'DE430'
 CRAB_PULSAR_EPHEMERIS_FILE: 'data/radio/original/v181025/crab_pulsar_ephemeris.csv'
 PATH_TO_RADIO_DATADIR: 'data/radio/original/v181025/radioSummary2017-2018'
 PATH_TO_XRAY_DATADIR: '/Users/enoto/work/drbv1/reporitory/heasarc/data/nicer/data/obs'
-NPHASE: 100
+NPHASE: 60
+LAGRANGE: 2
+CRAB_PROFILE_NORM_YMIN: 1.4e-2
+CRAB_PROFILE_NORM_YMAX: 2.7e-2
