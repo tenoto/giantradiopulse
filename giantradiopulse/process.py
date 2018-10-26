@@ -211,6 +211,14 @@ fplot_pulseprofile.py \
 		profile = giantradiopulse.xrayprofile.XrayProfileFitsfile(self.xrayprofile_fitsfile)
 		profile.write_fitsfile_with_normalized_extensions()
 
+		lag = 0
+		lagstr = 'lag{:0=+6}'.format(lag)			
+		profile = giantradiopulse.xrayprofile.XrayProfileFitsfile(self.xrayprofile_fitsfile)
+		outpdf = '%s_%s.pdf' % (self.xrayprofile_fitsfile.replace('.fits',''),lagstr)
+		profile.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.90,xmax=1.10,ymin=1.5e-2,ymax=2.7e-2)		
+		outpdf = '%s_%s_zoom.pdf' % (self.xrayprofile_fitsfile.replace('.fits',''),lagstr)
+		profile.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.00,xmax=2.00,ymin=1.5e-2,ymax=2.7e-2)
+
 class ProcessManager():
 	""" 
 	:param file_path: path to a file to setup yaml file.
