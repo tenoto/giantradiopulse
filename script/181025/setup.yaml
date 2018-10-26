@@ -1,0 +1,7 @@
+CRAB_PULSAR_RA_J2000:  83.633218 # (05:34:31.97232)
+CRAB_PULSAR_DEC_J2000: 22.014464 # (+22:00:52.069)
+PLANETARY_EPHEMERIS: 'DE430'
+CRAB_PULSAR_EPHEMERIS_FILE: 'data/radio/original/v181025/crab_pulsar_ephemeris.csv'
+PATH_TO_RADIO_DATADIR: 'data/radio/original/v181025/radioSummary2017-2018'
+PATH_TO_XRAY_DATADIR: '/Users/enoto/work/drbv1/reporitory/heasarc/data/nicer/data/obs'
+NPHASE: 100

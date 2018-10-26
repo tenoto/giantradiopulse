@@ -46,27 +46,42 @@ class GootTimeIntervalTextFile(GootTimeInterval):
 		self.ngtis = self.df['nGTI']
 
 		cols = []
-		cols.append(fits.Column(name='nGTI',format='I',array=self.df['nGTI']))		
-		cols.append(fits.Column(name='UTCstart',format='D',array=self.df['UTCstart'],unit='hhmmss.xxx'))
-		cols.append(fits.Column(name='UTCend',format='D',array=self.df['UTCend'],unit='hhmmss.xxx'))
-		cols.append(fits.Column(name='sodStart',format='D',array=self.df['sodStart'],unit='sec'))	
-		cols.append(fits.Column(name='sodEnd',format='D',array=self.df['sodEnd'],unit='sec'))
-		cols.append(fits.Column(name='MJDobsStart',format='D',array=self.df['MJDobsStart'],unit='day'))
-		cols.append(fits.Column(name='MJDobsEnd',format='D',array=self.df['MJDobsEnd'],unit='day'))	
-		cols.append(fits.Column(name='TDBstart',format='D',array=self.df['TDBstart'],unit='sec'))
-		cols.append(fits.Column(name='TDBend',format='D',array=self.df['TDBend'],unit='sec'))
-		cols.append(fits.Column(name='MJDtdbStart',format='D',array=self.df['MJDtdbStart'],unit='day'))				
-		cols.append(fits.Column(name='MJDtdbEnd',format='D',array=self.df['MJDtdbEnd'],unit='day'))
-		cols.append(fits.Column(name='duration_sec',format='D',array=self.df['duration_sec'],unit='sec'))	
-		cols.append(fits.Column(name='accum_sec',format='D',array=self.df['accum_sec'],unit='sec'))
-		cols.append(fits.Column(name='BARY_START',format='D',array=self.df['MJDtdbStart'],unit='day'))				
-		cols.append(fits.Column(name='BARY_STOP',format='D',array=self.df['MJDtdbEnd'],unit='day'))		
+		cols.append(fits.Column(name='GTI_ID',format='I',array=self.df['nGTI']))		
+		cols.append(fits.Column(name='START_UTC',format='D',array=self.df['UTCstart'],unit='hhmmss.xxx'))
+		cols.append(fits.Column(name='STOP_UTC',format='D',array=self.df['UTCend'],unit='hhmmss.xxx'))
+		cols.append(fits.Column(name='START_SOD',format='D',array=self.df['sodStart'],unit='sec'))	
+		cols.append(fits.Column(name='STOP_SOD',format='D',array=self.df['sodEnd'],unit='sec'))
+		cols.append(fits.Column(name='START_MJD',format='D',array=self.df['MJDobsStart'],unit='day'))
+		cols.append(fits.Column(name='STOP_MJD',format='D',array=self.df['MJDobsEnd'],unit='day'))	
+		cols.append(fits.Column(name='START_SOD_TDB',format='D',array=self.df['TDBstart'],unit='sec'))
+		cols.append(fits.Column(name='STOP_SOD_TDB',format='D',array=self.df['TDBend'],unit='sec'))
+		cols.append(fits.Column(name='START_MJD_TDB',format='D',array=self.df['MJDtdbStart'],unit='day'))				
+		cols.append(fits.Column(name='STOP_MJD_TDB',format='D',array=self.df['MJDtdbEnd'],unit='day'))
+		cols.append(fits.Column(name='EXPOSURE_SEC',format='D',array=self.df['duration_sec'],unit='sec'))	
+		cols.append(fits.Column(name='ACCUM_SEC',format='D',array=self.df['accum_sec'],unit='sec'))
+
+		#cols.append(fits.Column(name='nGTI',format='I',array=self.df['nGTI']))		
+		#cols.append(fits.Column(name='UTCstart',format='D',array=self.df['UTCstart'],unit='hhmmss.xxx'))
+		#cols.append(fits.Column(name='UTCend',format='D',array=self.df['UTCend'],unit='hhmmss.xxx'))
+		#cols.append(fits.Column(name='sodStart',format='D',array=self.df['sodStart'],unit='sec'))	
+		#cols.append(fits.Column(name='sodEnd',format='D',array=self.df['sodEnd'],unit='sec'))
+		#cols.append(fits.Column(name='MJDobsStart',format='D',array=self.df['MJDobsStart'],unit='day'))
+		#cols.append(fits.Column(name='MJDobsEnd',format='D',array=self.df['MJDobsEnd'],unit='day'))	
+		#cols.append(fits.Column(name='TDBstart',format='D',array=self.df['TDBstart'],unit='sec'))
+		#cols.append(fits.Column(name='TDBend',format='D',array=self.df['TDBend'],unit='sec'))
+		#cols.append(fits.Column(name='MJDtdbStart',format='D',array=self.df['MJDtdbStart'],unit='day'))				
+		#cols.append(fits.Column(name='MJDtdbEnd',format='D',array=self.df['MJDtdbEnd'],unit='day'))
+		#cols.append(fits.Column(name='duration_sec',format='D',array=self.df['duration_sec'],unit='sec'))	
+		#cols.append(fits.Column(name='accum_sec',format='D',array=self.df['accum_sec'],unit='sec'))
+		#cols.append(fits.Column(name='BARY_START',format='D',array=self.df['MJDtdbStart'],unit='day'))				
+		#cols.append(fits.Column(name='BARY_STOP',format='D',array=self.df['MJDtdbEnd'],unit='day'))		
 
 		hdu_primary = fits.PrimaryHDU()
 		hdu_table = fits.BinTableHDU.from_columns(cols,name='GTI')
 		hdulist = fits.HDUList([hdu_primary,hdu_table])
 		hdulist.writeto(outfitsfile,overwrite=True)		
 
+		return outfitsfile 
 
 def open_gti(file_path):
 	if ".txt" in file_path:
@@ -105,19 +120,30 @@ class GiantRadioPulseTextFile(GiantRadioPulse):
 					raise
 
 		cols = []
-		cols.append(fits.Column(name='nGRP',format='I',array=self.df['nGRP']))		
-		cols.append(fits.Column(name='nORG',format='I',array=self.df['nORG']))
-		cols.append(fits.Column(name='NSEQpulse',format='K',array=self.df['NSEQpulse']))
-		cols.append(fits.Column(name='TDBsec',format='D',array=self.df['TDBsec'],unit='sec'))	
-		cols.append(fits.Column(name='MJD',format='D',array=self.df['MJD'],unit='day'))
-		cols.append(fits.Column(name='peakSN',format='D',array=self.df['peakSN']))
-		cols.append(fits.Column(name='sumSN',format='D',array=self.df['sumSN']))	
-		cols.append(fits.Column(name='Nsubpulse',format='I',array=self.df['Nsubpulse']))
-		cols.append(fits.Column(name='phase',format='D',array=self.df['phase']))
-		cols.append(fits.Column(name='UThhmmss',format='D',array=self.df['UThhmmss'],unit='yymmss.ssssss'))				
-		cols.append(fits.Column(name='UTsec',format='D',array=self.df['UTsec'],unit='sec'))
-		cols.append(fits.Column(name='BARY_MJD',format='D',array=self.df['MJD'],unit='day'))				
+		cols.append(fits.Column(name='GRP_ID',format='I',array=self.df['nGRP']))		
+		cols.append(fits.Column(name='GRP_ORGID',format='I',array=self.df['nORG']))
+		cols.append(fits.Column(name='MOD_PULSE_NUMBER',format='K',array=self.df['NSEQpulse']))
+		cols.append(fits.Column(name='TIME_SOD_TDB',format='D',array=self.df['TDBsec'],unit='sec'))	
+		cols.append(fits.Column(name='TIME_MJD',format='D',array=self.df['MJD'],unit='day'))
+		cols.append(fits.Column(name='PEAK_SN',format='D',array=self.df['peakSN']))
+		cols.append(fits.Column(name='SUM_SN',format='D',array=self.df['sumSN']))	
+		cols.append(fits.Column(name='NUM_SUBPULSE',format='I',array=self.df['Nsubpulse']))
+		cols.append(fits.Column(name='PULSE_PHASE',format='D',array=self.df['phase']))
+		cols.append(fits.Column(name='TIME_UTC_HHMMSS',format='D',array=self.df['UThhmmss'],unit='yymmss.ssssss'))				
+		cols.append(fits.Column(name='TIME_UTC',format='D',array=self.df['UTsec'],unit='sec'))
 
+		#cols.append(fits.Column(name='nGRP',format='I',array=self.df['nGRP']))		
+		#cols.append(fits.Column(name='nORG',format='I',array=self.df['nORG']))
+		#cols.append(fits.Column(name='NSEQpulse',format='K',array=self.df['NSEQpulse']))
+		#cols.append(fits.Column(name='TDBsec',format='D',array=self.df['TDBsec'],unit='sec'))	
+		#cols.append(fits.Column(name='MJD',format='D',array=self.df['MJD'],unit='day'))
+		#cols.append(fits.Column(name='peakSN',format='D',array=self.df['peakSN']))
+		#cols.append(fits.Column(name='sumSN',format='D',array=self.df['sumSN']))	
+		#cols.append(fits.Column(name='Nsubpulse',format='I',array=self.df['Nsubpulse']))
+		#cols.append(fits.Column(name='phase',format='D',array=self.df['phase']))
+		#cols.append(fits.Column(name='UThhmmss',format='D',array=self.df['UThhmmss'],unit='yymmss.ssssss'))				
+		#cols.append(fits.Column(name='UTsec',format='D',array=self.df['UTsec'],unit='sec'))
+		#cols.append(fits.Column(name='BARY_MJD',format='D',array=self.df['MJD'],unit='day'))				
 
 		self.nevents = len(self.df['nGRP'])
 
@@ -136,6 +162,7 @@ class GiantRadioPulseTextFile(GiantRadioPulse):
 		hdulist = fits.HDUList([hdu_primary,hdu_table])
 		hdulist.writeto(outfitsfile,overwrite=True)		                                                
 
+		return outfitsfile 
 
 def open_gitantradiopulse(file_path):
 	if ".txt" in file_path:
