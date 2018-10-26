@@ -268,5 +268,4 @@ class ProcessManager():
 				plot_ymin=self.param['CRAB_PROFILE_NORM_YMIN'],
 				plot_ymax=self.param['CRAB_PROFILE_NORM_YMAX']
 				)
-			exit()
 
