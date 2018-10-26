@@ -247,7 +247,7 @@ class XrayProfileFitsfile():
 		hdulist.writeto(outfitsfile,overwrite=True)		
 
 
-	def plot_compared_pulseprofiles(self,lag=0,ymin=None,ymax=None,xmin=0.0,xmax=2.0):
+	def plot_compared_pulseprofiles(self,outpdf,lag=0,ymin=None,ymax=None,xmin=0.0,xmax=2.0):
 		y_colname = 'NORM_LAG{:0=+6}'.format(lag)
 		yerr_colname = 'NORM_ERR_LAG{:0=+6}'.format(lag)			
 
@@ -306,7 +306,7 @@ class XrayProfileFitsfile():
 		axes.set_ylabel('Normalized count rate')
 		axes.ticklabel_format(style="sci",axis="y",scilimits=(0,0))
 		plt.subplots_adjust(wspace=0, hspace=0)
-		plt.savefig('hoge.pdf',dpi=300)
+		plt.savefig(outpdf,dpi=300)
 
 		
 
