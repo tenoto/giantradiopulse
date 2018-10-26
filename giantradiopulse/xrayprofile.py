@@ -144,7 +144,7 @@ class XrayProfileFitsfile():
 		for keyword in keywords:
 			hdu_new.header[keyword] = hdu_org.header[keyword]
 
-	def generate_fitsfile(self,setup_yamlfile,
+	def generate_correlation_fitsfile(self,setup_yamlfile,
 		xray_fitsfile,mpgrp_fitsfile,ipgrp_fitsfile,radiogti_fitsfile,
 		nphase=180,lagrange=10):
 		self.read_setup_yamlfile(setup_yamlfile)
@@ -152,7 +152,7 @@ class XrayProfileFitsfile():
 		self.read_radio_fitsfile(mpgrp_fitsfile,ipgrp_fitsfile,radiogti_fitsfile)
 
 		if self.file_path == None:
-			self.file_path = '%s_corr.fits' % os.path.splitext(os.path.basename(self.xray_fitsfile))[0]
+			self.file_path = '%s_corr.fits' % os.path.splitext(self.xray_fitsfile)[0]
 		if os.path.dirname(self.file_path) != '' and not os.path.exists(os.path.dirname(self.file_path)):
 			try:
 				os.makedirs(os.path.dirname(self.file_path))
