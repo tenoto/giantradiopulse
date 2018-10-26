@@ -198,7 +198,7 @@ fplot_pulseprofile.py \
 		self.show_parameters()
 		self.write_parameter_yamlfile()
 
-	def generate_correlation_xrayprofile_fitsfile(self,nphase=60,lagrange=2,plot_ymin=None,plot_ymax=None):
+	def generate_correlation_xrayprofile_fitsfile(self,nphase=60,lagrange=2,plot_ymin=None,plot_ymax=None,plot_lagrange=2):
 		self.show_parameters()
 		profile = giantradiopulse.xrayprofile.XrayProfileFitsfile()
 		self.xrayprofile_fitsfile = profile.generate_correlation_fitsfile(
@@ -211,15 +211,15 @@ fplot_pulseprofile.py \
 		profile = giantradiopulse.xrayprofile.XrayProfileFitsfile(self.xrayprofile_fitsfile)
 		profile.write_fitsfile_with_normalized_extensions()
 
-		lag = 0
-		lagstr = 'lag{:0=+6}'.format(lag)			
-		profile = giantradiopulse.xrayprofile.XrayProfileFitsfile(self.xrayprofile_fitsfile)
-		outpdf = '%s_%s.pdf' % (self.xrayprofile_fitsfile.replace('.fits',''),lagstr)
-		profile.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.90,xmax=1.10,ymin=plot_ymin,ymax=plot_ymax)		
-		outpdf = '%s_%s_zoom.pdf' % (self.xrayprofile_fitsfile.replace('.fits',''),lagstr)
-		profile.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.00,xmax=2.00,ymin=plot_ymin,ymax=plot_ymax)
+		for lag in range(-plot_lagrange,plot_lagrange+1):
+			lagstr = 'lag{:0=+6}'.format(lag)			
+			profile = giantradiopulse.xrayprofile.XrayProfileFitsfile(self.xrayprofile_fitsfile)
+			outpdf = '%s_%s.pdf' % (self.xrayprofile_fitsfile.replace('.fits',''),lagstr)
+			profile.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.90,xmax=1.10,ymin=plot_ymin,ymax=plot_ymax)		
+			outpdf = '%s_%s_zoom.pdf' % (self.xrayprofile_fitsfile.replace('.fits',''),lagstr)
+			profile.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.00,xmax=2.00,ymin=plot_ymin,ymax=plot_ymax)
 
-class ProcessManager():
+	class ProcessManager():
 	""" 
 	:param file_path: path to a file to setup yaml file.
 	"""
