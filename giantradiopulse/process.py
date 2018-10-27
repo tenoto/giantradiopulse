@@ -253,7 +253,7 @@ class ProcessManager():
 				sys.stdout.write('-- ObservationUnit {} is skipped.\n'.format(row['dataid']))
 				continue 
 			self.observationunit_list.append(ObservationUnit(row,self.param,self.outdir))			
-			self.observationunit_list[-1].show_parameters()
+			#self.observationunit_list[-1].show_parameters()
 
 	def prepare_datafiles(self):
 		for obs in self.observationunit_list:
