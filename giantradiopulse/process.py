@@ -266,7 +266,7 @@ class ProcessManager():
 		for obs in self.observationunit_list:			
 			setup_yaml = '%s/%s/%s_setup.yaml' % (self.outdir,obs.param['dataid'],obs.param['dataid'])
 			print(setup_yaml)
-			#obs.reload_parameter_yamlfile(setup_yaml)
+			obs.reload_parameter_yamlfile(setup_yaml)
 			#obs.generate_correlation_xrayprofile_fitsfile(
 			#	nphase=self.param['NPHASE'],
 			#	lagrange=self.param['LAGRANGE'],
