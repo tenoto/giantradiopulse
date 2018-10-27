@@ -27,7 +27,7 @@ def prepare_datafiles(file_path,outdir):
 def run_correlation_study(file_path,outdir):
 	process_manager = giantradiopulse.process.ProcessManager(
 		file_path,outdir=outdir)
-	process_manager.run_correlation_study()
+	#process_manager.run_correlation_study()
 
 def main():
 	cli()

@@ -28,6 +28,7 @@ class ObservationUnit():
 		self.param['suboutdir'] = self.outdir
 		if not os.path.exists(self.param['suboutdir']):
 			os.makedirs(self.outdir)
+		print(self.param['suboutdir'])
 
 	def show_parameters(self):
 		print(self.param)
@@ -243,9 +244,6 @@ class ProcessManager():
 		if not os.path.exists(self.outdir):
 			os.makedirs(self.outdir)
 		self.read_ephemeris_file()
-
-		for obs in self.observationunit_list:			
-			print(obs.param['suboutdir'])
 
 	def read_ephemeris_file(self):
 		self.df = pd.read_csv(self.param['CRAB_PULSAR_EPHEMERIS_FILE'],
