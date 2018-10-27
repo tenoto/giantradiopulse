@@ -265,12 +265,11 @@ class ProcessManager():
 		print("----run_correlation_study----")
 		for obs in self.observationunit_list:			
 			setup_yaml = '%s/%s/%s_setup.yaml' % (self.outdir,obs.param['dataid'],obs.param['dataid'])
-			print(setup_yaml)
 			obs.reload_parameter_yamlfile(setup_yaml)
-			#obs.generate_correlation_xrayprofile_fitsfile(
-			#	nphase=self.param['NPHASE'],
-			#	lagrange=self.param['LAGRANGE'],
-			#	plot_ymin=self.param['CRAB_PROFILE_NORM_YMIN'],
-			#	plot_ymax=self.param['CRAB_PROFILE_NORM_YMAX']
-			#	)
+			obs.generate_correlation_xrayprofile_fitsfile(
+				nphase=self.param['NPHASE'],
+				lagrange=self.param['LAGRANGE'],
+				plot_ymin=self.param['CRAB_PROFILE_NORM_YMIN'],
+				plot_ymax=self.param['CRAB_PROFILE_NORM_YMAX']
+				)
 
