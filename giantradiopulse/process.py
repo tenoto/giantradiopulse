@@ -260,6 +260,7 @@ class ProcessManager():
 
 	def run_correlation_study(self,nphase=60,lagrange=2):
 		for obs in self.observationunit_list:			
+			print(obs)
 			setup_yaml = '%s/%s/%s_setup.yaml' % (self.outdir,obs.param['dataid'],obs.param['dataid'])
 			obs.reload_parameter_yamlfile(setup_yaml)
 			#obs.generate_correlation_xrayprofile_fitsfile(
