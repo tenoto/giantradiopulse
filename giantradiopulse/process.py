@@ -28,7 +28,7 @@ class ObservationUnit():
 		for keyword in param:
 			self.param[keyword] = param[keyword]
 		for keyword in row.index:
-			self.param[keyword] = self.row[keyword]	
+			self.param[keyword] = row[keyword]	
 
 		self.outdir = '%s/%s' % (outdir,self.param['dataid'])
 		self.param['suboutdir'] = self.outdir
