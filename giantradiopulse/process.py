@@ -246,6 +246,7 @@ class ProcessManager():
 		self.read_ephemeris_file()
 
 		for obs in self.observationunit_list:			
+			print(obs.outdir)
 			print(obs.param['suboutdir'])
 
 	def read_ephemeris_file(self):
