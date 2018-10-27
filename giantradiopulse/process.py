@@ -261,7 +261,7 @@ class ProcessManager():
 
 	def run_correlation_study(self,nphase=60,lagrange=2):
 		for obs in self.observationunit_list:			
-			obs.show_parameters()
+			print(obs.outdir)
 		#	print(obs.param)
 			#setup_yaml = '%s/%s/%s_setup.yaml' % (self.outdir,obs.param['dataid'],obs.param['dataid'])
 			#print(setup_yaml)
