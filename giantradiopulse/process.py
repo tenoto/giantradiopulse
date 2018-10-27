@@ -20,8 +20,9 @@ class ObservationUnit():
 	def __init__(self,row,param,outdir):
 		print("-- ObservationUnit {} is generated.".format(row['dataid']))
 		self.param = param
-		for keyword in row.index:
-			self.param[keyword] = row[keyword]
+		self.row = row
+		for keyword in self.row.index:
+			self.param[keyword] = self.row[keyword]
 
 		self.outdir = '%s/%s' % (outdir,self.param['dataid'])
 		self.param['suboutdir'] = self.outdir
@@ -245,7 +246,7 @@ class ProcessManager():
 
 		for obs in self.observationunit_list:			
 			print(obs.param['suboutdir'])
-			
+
 	def read_ephemeris_file(self):
 		self.df = pd.read_csv(self.param['CRAB_PULSAR_EPHEMERIS_FILE'],
 			delim_whitespace=True,header=0)
