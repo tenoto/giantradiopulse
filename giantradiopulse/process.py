@@ -241,7 +241,7 @@ class ProcessManager():
 
 		if not os.path.exists(self.outdir):
 			os.makedirs(self.outdir)
-		self.read_ephemeris_file()
+		#self.read_ephemeris_file()
 
 	def read_ephemeris_file(self):
 		self.df = pd.read_csv(self.param['CRAB_PULSAR_EPHEMERIS_FILE'],
@@ -264,7 +264,8 @@ class ProcessManager():
 		print(len(self.observationunit_list))
 		self.read_ephemeris_file()
 		for obs in self.observationunit_list:			
-			obs.show_parameters()
+			print(self.param['suboutdir'])
+			#obs.show_parameters()
 			#glob.glob('%s/*_setup.yaml' % obs.outdir)
 		#	print(obs.param)
 			#setup_yaml = '%s/%s/%s_setup.yaml' % (self.outdir,obs.param['dataid'],obs.param['dataid'])
