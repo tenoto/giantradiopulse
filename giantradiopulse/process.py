@@ -19,11 +19,6 @@ import giantradiopulse.xrayprofile
 class ObservationUnit():
 	def __init__(self,row,param,outdir):
 		print("-- ObservationUnit {} is generated.".format(row['dataid']))
-		#self.param = param
-		#self.row = row
-		#for keyword in self.row.index:
-		#	self.param[keyword] = self.row[keyword]
-
 		self.param = {}
 		for keyword in param:
 			self.param[keyword] = param[keyword]
@@ -269,12 +264,8 @@ class ProcessManager():
 	def run_correlation_study(self,nphase=60,lagrange=2):
 		print("----run_correlation_study----")
 		for obs in self.observationunit_list:			
-			print(obs.param['dataid'])
-			#obs.show_parameters()
-			#glob.glob('%s/*_setup.yaml' % obs.outdir)
-		#	print(obs.param)
-			#setup_yaml = '%s/%s/%s_setup.yaml' % (self.outdir,obs.param['dataid'],obs.param['dataid'])
-			#print(setup_yaml)
+			setup_yaml = '%s/%s/%s_setup.yaml' % (self.outdir,obs.param['dataid'],obs.param['dataid'])
+			print(setup_yaml)
 			#obs.reload_parameter_yamlfile(setup_yaml)
 			#obs.generate_correlation_xrayprofile_fitsfile(
 			#	nphase=self.param['NPHASE'],
