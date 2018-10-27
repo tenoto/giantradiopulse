@@ -19,16 +19,21 @@ import giantradiopulse.xrayprofile
 class ObservationUnit():
 	def __init__(self,row,param,outdir):
 		print("-- ObservationUnit {} is generated.".format(row['dataid']))
-		self.param = param
-		self.row = row
-		for keyword in self.row.index:
-			self.param[keyword] = self.row[keyword]
+		#self.param = param
+		#self.row = row
+		#for keyword in self.row.index:
+		#	self.param[keyword] = self.row[keyword]
+
+		self.param = {}
+		for keyword in param:
+			print(keyword)
+		for keyword in row.index:
+			self.param[keyword] = self.row[keyword]	
 
 		self.outdir = '%s/%s' % (outdir,self.param['dataid'])
 		self.param['suboutdir'] = self.outdir
 		if not os.path.exists(self.param['suboutdir']):
 			os.makedirs(self.outdir)
-		print(self.param['suboutdir'])
 
 	def show_parameters(self):
 		print(self.param)
