@@ -250,10 +250,6 @@ class ProcessManager():
 			os.makedirs(self.outdir)
 		self.read_ephemeris_file()
 
-		for obs in self.observationunit_list:			
-			print(obs.outdir)
-			print(obs.param['suboutdir'])
-
 	def read_ephemeris_file(self):
 		self.df = pd.read_csv(self.param['CRAB_PULSAR_EPHEMERIS_FILE'],
 			delim_whitespace=True,header=0)
@@ -273,7 +269,7 @@ class ProcessManager():
 	def run_correlation_study(self,nphase=60,lagrange=2):
 		print("----run_correlation_study----")
 		for obs in self.observationunit_list:			
-			print(obs.param['suboutdir'])
+			print(obs.param['dataid'])
 			#obs.show_parameters()
 			#glob.glob('%s/*_setup.yaml' % obs.outdir)
 		#	print(obs.param)
