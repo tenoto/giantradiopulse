@@ -26,7 +26,7 @@ class ObservationUnit():
 
 		self.param = {}
 		for keyword in param:
-			print(keyword)
+			self.param[keyword] = param[keyword]
 		for keyword in row.index:
 			self.param[keyword] = self.row[keyword]	
 
