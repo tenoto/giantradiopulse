@@ -217,9 +217,9 @@ fplot_pulseprofile.py \
 			lagstr = 'lag{:0=+6}'.format(lag)			
 			profile = giantradiopulse.xrayprofile.XrayProfileFitsfile(self.xrayprofile_fitsfile)
 			outpdf = '%s_%s.pdf' % (self.xrayprofile_fitsfile.replace('.fits',''),lagstr)
-			profile.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.90,xmax=1.10,ymin=plot_ymin,ymax=plot_ymax)		
+			profile.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.00,xmax=2.00,ymin=plot_ymin,ymax=plot_ymax)			
 			outpdf = '%s_%s_zoom.pdf' % (self.xrayprofile_fitsfile.replace('.fits',''),lagstr)
-			profile.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.00,xmax=2.00,ymin=plot_ymin,ymax=plot_ymax)
+			profile.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.90,xmax=1.10,ymin=plot_ymin,ymax=plot_ymax)		
 
 class ProcessManager():
 	""" 
@@ -272,4 +272,35 @@ class ProcessManager():
 				plot_ymin=self.param['CRAB_PROFILE_NORM_YMIN'],
 				plot_ymax=self.param['CRAB_PROFILE_NORM_YMAX']
 				)
+
+	def add_observations(self,outfitsfile='nigrp_add/nigrp_add.fits',plot_ymin=None,plot_ymax=None,plot_lagrange=2):
+		print("----add_observations----")
+
+		outdir = os.path.dirname(outfitsfile)
+		if not os.path.exists(outdir):
+			os.makedirs(outdir)
+
+		xrayprofilefitsfile_add_list = []
+		for obs in self.observationunit_list:			
+			evtfitsfile = '%s/%s/ni%s_0mpu7_cl_nibary_phase_corr.fits' % (self.outdir,obs.param['dataid'],obs.param['nicerobsid'])
+			if obs.param['add_flag']:
+				print("adding %s..." % evtfitsfile)
+				xrayprofilefitsfile_add_list.append(giantradiopulse.xrayprofile.XrayProfileFitsfile(evtfitsfile))
+		if len(xrayprofilefitsfile_add_list) < 2:
+			sys.stderr.write('Error:No add list...')
+			exit()
+
+		profile_sum = xrayprofilefitsfile_add_list[0]
+		for i in range(1,len(xrayprofilefitsfile_add_list)):
+			profile_sum.add(xrayprofilefitsfile_add_list[i])
+		profile_sum.write_fitsfile_with_normalized_extensions(outfitsfile=outfitsfile)
+
+		profile_sum = giantradiopulse.xrayprofile.XrayProfileFitsfile(outfitsfile)
+		for lag in range(-plot_lagrange,plot_lagrange+1):	
+			lagstr = 'lag{:0=+6}'.format(lag)						
+			outpdf = '%s_%s.pdf' % (outfitsfile.replace('.fits',''),lagstr)
+			profile_sum.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.00,xmax=2.00,ymin=plot_ymin,ymax=plot_ymax,title='sum')
+			outpdf = '%s_%s_zoom.pdf' % (outfitsfile.replace('.fits',''),lagstr)
+			profile_sum.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.90,xmax=1.10,ymin=plot_ymin,ymax=plot_ymax,title='sum')		
+			
 

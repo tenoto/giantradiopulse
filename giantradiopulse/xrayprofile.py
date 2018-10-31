@@ -201,6 +201,7 @@ class XrayProfileFitsfile():
 		return normalized_count, normalized_error
 
 	def write_fitsfile_with_normalized_extensions(self,outfitsfile=None):
+		print("...write_fitsfile_with_normalized_extensions")
 		if outfitsfile == None:
 			outfitsfile = self.file_path
 
@@ -247,7 +248,7 @@ class XrayProfileFitsfile():
 		hdulist.writeto(outfitsfile,overwrite=True)		
 
 
-	def plot_compared_pulseprofiles(self,outpdf,lag=0,ymin=None,ymax=None,xmin=0.0,xmax=2.0):
+	def plot_compared_pulseprofiles(self,outpdf,lag=0,ymin=None,ymax=None,xmin=0.0,xmax=2.0,title=None):
 		y_colname = 'NORM_LAG{:0=+6}'.format(lag)
 		yerr_colname = 'NORM_ERR_LAG{:0=+6}'.format(lag)			
 
@@ -264,16 +265,17 @@ class XrayProfileFitsfile():
 		enhance = peak_grp / peak_nongrp 
 		significance = (peak_grp - peak_nongrp)/peak_err_grp
 
-		title = '%d-%02d-%02d (%s) NICER:%s %s:SN%s LagX=%d' % (
-			self.hdu['MPGRP_NORM'].header['YEAR'],
-			self.hdu['MPGRP_NORM'].header['MONTH'],
-			self.hdu['MPGRP_NORM'].header['DAY'],			
-			self.hdu['MPGRP_NORM'].header['DATAID'],
-			self.hdu['MPGRP_NORM'].header['NIOBSID'],
-			self.hdu['MPGRP_NORM'].header['RADIOOBS'],
-			self.hdu['MPGRP_NORM'].header['SNTHR'],
-			lag 
-			)
+		if title == None:
+			title = '%d-%02d-%02d (%s) NICER:%s %s:SN%s LagX=%d' % (
+				self.hdu['MPGRP_NORM'].header['YEAR'],
+				self.hdu['MPGRP_NORM'].header['MONTH'],
+				self.hdu['MPGRP_NORM'].header['DAY'],			
+				self.hdu['MPGRP_NORM'].header['DATAID'],
+				self.hdu['MPGRP_NORM'].header['NIOBSID'],
+				self.hdu['MPGRP_NORM'].header['RADIOOBS'],
+				self.hdu['MPGRP_NORM'].header['SNTHR'],
+				lag 
+				)
 		legend_title = 'enhance=%.1f%% (%.1f-sigma)\nX-ray(%.1f ks):%d/%d\nMPGRP:%d IPGRP:%d' % (
 			(enhance-1.0)*100.0,significance,
 			float(self.hdu['MPGRP'].header['EXPXRAY'])*1e-3,			
@@ -308,6 +310,24 @@ class XrayProfileFitsfile():
 		plt.subplots_adjust(wspace=0, hspace=0)
 		plt.savefig(outpdf,dpi=300)
 
-		
+	def add(self,xrayprofilefitsfile_plus):
+		print("adding %s..." % xrayprofilefitsfile_plus.hdu[1].header['dataid'])
 
+		for extension in ['MPGRP','NONMPGRP']:
+			for column in self.hdu[extension].data.columns:
+				if column.name == 'PULSE_PHASE':
+					continue 
+				self.hdu[extension].data[column.name] += xrayprofilefitsfile_plus.hdu[extension].data[column.name]
+
+			for keyword in ['DATAID','NIOBSID']:
+				self.hdu[extension].header[keyword] = '%s+%s' % (self.hdu[extension].header[keyword],xrayprofilefitsfile_plus.hdu[extension].header[keyword])
+
+			for keyword in ['NXRAYEVT']:
+				self.hdu[extension].header[keyword] += xrayprofilefitsfile_plus.hdu[extension].header[keyword]
+
+			for keyword in ['RADIOOBS','NU0','NUDOT0','YEAR','MONTH','DAY','DOY','METEPOCH','PERIOD0','PDOT0','SNTHR']:
+				self.hdu[extension].header[keyword] = 'to be checked.'
+
+		for keyword in ['EXPXRAY','NMPGRP','NIPGRP']:
+			self.hdu['MPGRP'].header[keyword] += xrayprofilefitsfile_plus.hdu['MPGRP'].header[keyword]
 

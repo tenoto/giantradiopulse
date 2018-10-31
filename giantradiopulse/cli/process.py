@@ -29,6 +29,14 @@ def run_correlation_study(file_path,outdir):
 		file_path,outdir=outdir)
 	process_manager.run_correlation_study()
 
+@cli.command(help="Add observation.")
+@click.argument("file_path", type=click.Path(exists=True))
+@click.option("--outdir", type=click.Path(), default='out/crabgrp')
+def add_observations(file_path,outdir):
+	process_manager = giantradiopulse.process.ProcessManager(
+		file_path,outdir=outdir)
+	process_manager.add_observations()
+
 def main():
 	cli()
 
