@@ -261,8 +261,9 @@ class XrayProfileFitsfile():
 		peak_nongrp = max(self.hdu['NONMPGRP_NORM'].data[y_colname])		
 		peak_err_grp = max(self.hdu['MPGRP_NORM'].data[yerr_colname])
 		peak_err_nongrp = max(self.hdu['NONMPGRP_NORM'].data[yerr_colname])				
+		bottom_nongrp = min(self.hdu['NONMPGRP_NORM'].data[y_colname])				
 
-		enhance = peak_grp / peak_nongrp 
+		enhance = (peak_grp-bottom_nongrp) / (peak_nongrp -bottom_nongrp)
 		significance = (peak_grp - peak_nongrp)/peak_err_grp
 
 		if title == None:
