@@ -11,7 +11,9 @@ import sys
 import shutil
 import glob 
 import yaml
+import numpy as np 
 import pandas as pd 
+import astropy.io.fits as fits 
 
 import giantradiopulse.radio
 import giantradiopulse.xrayprofile 
@@ -257,6 +259,91 @@ fplot_pulseprofile.py \
 		cmd += '-o %s ' % self.param['niphasepha'] 
 		print(cmd);os.system(cmd)
 
+	def add_grp_flag_to_xrayevents(self,outdir):
+		### Radio GRP MP
+		if not os.path.exists(self.param['radio_mpgrp_fitsfile']):
+			sys.stderr.write('file %s does not exist.\n' % self.param['radio_mpgrp_fitsfile'])
+			quit()
+		print('add_grp_flag_to_xrayevents: %s ' % self.param['radio_mpgrp_fitsfile'])
+
+		try:
+			with fits.open(self.param['radio_mpgrp_fitsfile']) as hdu_mpgrp:
+				hdu_mpgrp_table = hdu_mpgrp['GRP'].data
+		except OSError as e:
+			raise 
+		print(hdu_mpgrp_table['MOD_PULSE_NUMBER'])
+
+
+		### Radio GRP IP
+		if not os.path.exists(self.param['radio_ipgrp_fitsfile']):
+			sys.stderr.write('file %s does not exist.\n' % self.param['radio_ipgrp_fitsfile'])
+			quit()
+		print('add_grp_flag_to_xrayevents: %s ' % self.param['radio_ipgrp_fitsfile'])
+
+		try:
+			with fits.open(self.param['radio_ipgrp_fitsfile']) as hdu_ipgrp:
+				hdu_ipgrp_table = hdu_ipgrp['GRP'].data
+		except OSError as e:
+			raise 
+		print(hdu_ipgrp_table['MOD_PULSE_NUMBER'])
+
+
+		### X-ray events
+		if not os.path.exists(self.param['niphaseevt_esel']):
+			sys.stderr.write('file %s does not exist.\n' % self.param['niphaseevt_esel'])
+			quit()
+		print('add_grp_flag_to_xrayevents: file %s ' % self.param['niphaseevt_esel'])
+
+		try:
+			with fits.open(self.param['niphaseevt_esel']) as hdu_original:
+				original_header = hdu_original['EVENTS'].header				
+				original_table = hdu_original['EVENTS'].data
+				original_columns = hdu_original['EVENTS'].columns
+		except OSError as e:
+			raise 
+		print(original_table)
+		print(original_columns)
+
+		flag_xrays_isin_mpgrp = np.isin(original_table['MOD_PULSE_NUMBER'],hdu_mpgrp_table['MOD_PULSE_NUMBER'])		
+		print(flag_xrays_isin_mpgrp)
+		new_column_mpgrp_flag = np.array(flag_xrays_isin_mpgrp,dtype='bool')		
+
+		flag_xrays_isin_ipgrp = np.isin(original_table['MOD_PULSE_NUMBER'],hdu_ipgrp_table['MOD_PULSE_NUMBER'])		
+		print(flag_xrays_isin_ipgrp)
+		new_column_ipgrp_flag = np.array(flag_xrays_isin_ipgrp,dtype='bool')		
+
+		mjd_array = np.full(len(flag_xrays_isin_mpgrp),self.param['MJD'])
+
+		new_columns = fits.ColDefs([
+			fits.Column(name=original_columns['TIME'].name,format=original_columns['TIME'].format,disp=original_columns['TIME'].disp,array=original_table['TIME']),
+			fits.Column(name=original_columns['DET_ID'].name,format=original_columns['DET_ID'].format,disp=original_columns['DET_ID'].disp,array=original_table['DET_ID']),
+			#fits.Column(name=original_columns['PI_FAST'].name,format=original_columns['PI_FAST'].format,disp=original_columns['PI_FAST'].disp,array=original_table['PI_FAST']),
+			fits.Column(name=original_columns['PI'].name,format=original_columns['PI'].format,disp=original_columns['PI'].disp,array=original_table['PI']),
+			#fits.Column(name=original_columns['PI_RATIO'].name,format=original_columns['PI_RATIO'].format,disp=original_columns['PI_RATIO'].disp,array=original_table['PI_RATIO']),
+			fits.Column(name=original_columns['PHASE'].name,format=original_columns['PHASE'].format,disp=original_columns['PHASE'].disp,array=original_table['PHASE']),	
+			fits.Column(name=original_columns['PULSE_NUMBER'].name,format=original_columns['PULSE_NUMBER'].format,disp=original_columns['PULSE_NUMBER'].disp,array=original_table['PULSE_NUMBER']),
+			fits.Column(name=original_columns['PULSE_PHASE'].name,format=original_columns['PULSE_PHASE'].format,disp=original_columns['PULSE_PHASE'].disp,array=original_table['PULSE_PHASE']),
+			fits.Column(name=original_columns['MOD_PULSE_NUMBER'].name,format=original_columns['MOD_PULSE_NUMBER'].format,disp=original_columns['MOD_PULSE_NUMBER'].disp,array=original_table['MOD_PULSE_NUMBER']),
+			fits.Column(name='MPGRP_FLAG',format='L',array=new_column_mpgrp_flag),
+			fits.Column(name='IPGRP_FLAG',format='L',array=new_column_ipgrp_flag),
+			fits.Column(name='MJD',format='K',array=mjd_array),
+			])
+			
+		outfitsfile = '%s/%s/%s_grpflag.evt' % (outdir,self.param['dataid'],
+			os.path.splitext(os.path.basename(self.param['niphaseevt_esel']))[0])
+		print(outfitsfile)
+
+		if not os.path.exists(os.path.dirname(outfitsfile)):
+			os.makedirs(os.path.dirname(outfitsfile))
+		hdu_primary = fits.PrimaryHDU()
+		hdu_newtable = fits.BinTableHDU.from_columns(new_columns,name='EVENTS')	
+		hdulist = fits.HDUList([hdu_primary,hdu_newtable])
+		hdulist.writeto(outfitsfile,overwrite=True)	
+
+		cmd = 'cphead %s[0] %s[0];\n' % (self.param['niphaseevt_esel'],outfitsfile)
+		cmd += 'cphead %s[1] %s[1];\n' % (self.param['niphaseevt_esel'],outfitsfile)		
+		print(cmd);os.system(cmd)
+
 class ProcessManager():
 	""" 
 	:param file_path: path to a file to setup yaml file.
@@ -337,7 +424,15 @@ class ProcessManager():
 			profile_sum.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.00,xmax=2.00,ymin=plot_ymin,ymax=plot_ymax,title='sum')
 			outpdf = '%s_%s_zoom.pdf' % (outfitsfile.replace('.fits',''),lagstr)
 			profile_sum.plot_compared_pulseprofiles(outpdf,lag=lag,xmin=0.90,xmax=1.10,ymin=plot_ymin,ymax=plot_ymax,title='sum')		
-			
+
+	def add_grp_flag_to_xrayevents(self,indir):
+		print("----add_grp_flag_to_xrayevents----")
+		for obs in self.observationunit_list:			
+			setup_yaml = '%s/%s/%s_setup.yaml' % (indir,obs.param['dataid'],obs.param['dataid'])
+			obs.reload_parameter_yamlfile(setup_yaml)		
+			print(obs.param)
+			obs.add_grp_flag_to_xrayevents(self.outdir)
+
 	def generate_lightcurves(self):
 		print("----make_lightcurves----")
 		for obs in self.observationunit_list:			

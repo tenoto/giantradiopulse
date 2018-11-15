@@ -37,6 +37,39 @@ def add_observations(file_path,outdir):
 		file_path,outdir=outdir)
 	process_manager.add_observations()
 
+@cli.command(help="Generate light curves.")
+@click.argument("file_path", type=click.Path(exists=True))
+@click.option("--outdir", type=click.Path(), default='out/crabgrp')
+def generate_lightcurves(file_path,outdir):
+	process_manager = giantradiopulse.process.ProcessManager(
+		file_path,outdir=outdir)
+	process_manager.generate_lightcurves()	
+
+@cli.command(help="Generate background spectrum.")
+@click.argument("file_path", type=click.Path(exists=True))
+@click.option("--outdir", type=click.Path(), default='out/crabgrp')
+def generate_bgdspec(file_path,outdir):
+	process_manager = giantradiopulse.process.ProcessManager(
+		file_path,outdir=outdir)
+	process_manager.generate_bgdspec()	
+
+@cli.command(help="Generate source spectrum.")
+@click.argument("file_path", type=click.Path(exists=True))
+@click.option("--outdir", type=click.Path(), default='out/crabgrp')
+def generate_srcspec(file_path,outdir):
+	process_manager = giantradiopulse.process.ProcessManager(
+		file_path,outdir=outdir)
+	process_manager.generate_srcspec()	
+
+@cli.command(help="Add GRP flag.")
+@click.argument("file_path", type=click.Path(exists=True))
+@click.argument("indir", type=click.Path(exists=True))
+@click.option("--outdir", type=click.Path(), default='out/crabgrp')
+def add_grp_flag_to_xrayevents(file_path,indir,outdir):
+	process_manager = giantradiopulse.process.ProcessManager(
+		file_path,outdir=outdir)
+	process_manager.add_grp_flag_to_xrayevents(indir)	
+
 def main():
 	cli()
 

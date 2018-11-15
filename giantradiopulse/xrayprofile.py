@@ -94,6 +94,7 @@ class XrayProfileFitsfile():
 		print("{} is successfully loaded.".format(self.radiogti_fitsfile))
 
 	def get_xray_profile_array(self,xray_hdu,grp_hdu,nphase=180,lag=0,flag_grp=True):
+
 		flag_xrays_isin_grp = np.isin(
 			xray_hdu['EVENTS'].data['MOD_PULSE_NUMBER']+lag,
 			grp_hdu['GRP'].data['MOD_PULSE_NUMBER'])
