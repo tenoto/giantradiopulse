@@ -1,0 +1,14 @@
+CRAB_PULSAR_RA_J2000:  83.633218 # (05:34:31.97232)
+CRAB_PULSAR_DEC_J2000: 22.014464 # (+22:00:52.069)
+PLANETARY_EPHEMERIS: 'DE430'
+CRAB_PULSAR_EPHEMERIS_FILE: 'data/radio/original/v181119/crab_pulsar_ephemeris.csv'
+PATH_TO_RADIO_DATADIR: 'data/radio/original/v181119/radio_list'
+PATH_TO_XRAY_DATADIR: '/Users/enoto/work/drbv1/reporitory/heasarc/data/nicer/data/obs'
+NPHASE: 50
+LAGRANGE: 100
+CRAB_PROFILE_NORM_YMIN: 1.4e-2
+CRAB_PROFILE_NORM_YMAX: 2.7e-2
+SCRIPT_PATH_NIBGDSPEC_MIT3C50: '/Users/enoto/work/drbv1/soft/git/hoppy/hoppy/nicer/nibgdspec_mit3C50.py'
+ENERGY_MIN_KEV: 0.3
+ENERGY_MAX_KEV: 12.0
+LC_4BAND: [[0.0,0.26],[0.26,0.5],[0.5,10.0],[10.0,15.0]]
